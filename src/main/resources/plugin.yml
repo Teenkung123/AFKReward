@@ -4,3 +4,8 @@ main: com.teenkung.afkreward.AFKReward
 api-version: 1.19
 authors: [ Teenkung123 ]
 description: plugin made For Developcraft Network
+
+commands:
+  afkreward:
+    description: "afkreward command"
+

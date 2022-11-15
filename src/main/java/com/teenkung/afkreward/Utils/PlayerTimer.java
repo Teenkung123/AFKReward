@@ -22,6 +22,7 @@ public class PlayerTimer {
     public static void removePlayer(Player player) {
         playerTimer.remove(player);
     }
+    public static int getTimer(Player player) { return playerTimer.getOrDefault(player, 0); }
 
     //Method executed by startTimer Method
     private static void executeTask() {
@@ -53,24 +54,28 @@ public class PlayerTimer {
         }
     }
 
-    private static boolean isInAFKRegion(Player player) {
+    public static boolean isInAFKRegion(Player player) {
         if (ConfigLoader.getType() == OptionType.REGION) {
-            ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(ConfigLoader.getRegionName());
-            if (pr != null) {
-                return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+            for (String name : ConfigLoader.getRegionName()) {
+                ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(name);
+                if (pr != null) {
+                    return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+                }
             }
         } else {
-            return player.getWorld().getName().equals(ConfigLoader.getWorldName());
+            return ConfigLoader.getWorldName().contains(player.getWorld().getName());
         }
         return false;
     }
 
     private static void executeReward(Player player, String id) {
         for (String command :ConfigLoader.getRewardCommand(id)) {
-            command = command.replaceAll("<seconds>", String.valueOf(playerTimer.get(player)));
-            command = command.replaceAll("<minute>", String.valueOf(Math.floor(playerTimer.get(player) / 60D)));
-            command = command.replaceAll("<hour>", String.valueOf(Math.floor(playerTimer.get(player) / 3600D)));
-            command = command.replaceAll("<player>", player.getName());
+            command = command
+                    .replaceAll("<seconds>", String.valueOf(playerTimer.getOrDefault(player, 0)))
+                    .replaceAll("<second>", String.valueOf(playerTimer.getOrDefault(player, 0) % 60))
+                    .replaceAll("<minute>", String.valueOf(Math.floor(playerTimer.getOrDefault(player, 0) / 60D)))
+                    .replaceAll("<hour>", String.valueOf(Math.floor(playerTimer.getOrDefault(player, 0) / 3600D)))
+                    .replaceAll("<player>", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }
     }

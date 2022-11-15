@@ -19,6 +19,6 @@ public class WorldGuardLoader {
     }
 
     public static RegionContainer getRegionContainer() { return Container; }
-    public static RegionManager getRegionManager(World world) { return Container.get(BukkitAdapter.adapt(world)); }
+    public static RegionManager getRegionManager(World world) { return getRegionContainer().get(BukkitAdapter.adapt(world)); }
 
 }

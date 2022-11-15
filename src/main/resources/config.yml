@@ -4,11 +4,13 @@ options:
     #if set type to 'Region'
     region:
         #Name of World guard Regions
-        name: AFKReward
+        name:
+            - AFKReward
     #if set type to 'World'
     world:
         #Name of world
-        name: 'AFKReward'
+        name:
+            - AFKReward
 
 rewards:
     'Example':
@@ -20,3 +22,18 @@ rewards:
         rewards:
             - 'w <player> You have been AFK for <seconds> seconds!'
             - 'give <player> dirt'
+
+Language:
+    Prefix: "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> "
+    #Error Area
+    Invalid-Arguments: "<prefix><GRADIENT:FB0000>Invalid Argument. Please Check Spelling or tab complete!</GRADIENT:840000>"
+    Player-Not-Found: "<prefix><GRADIENT:FB0000>Player not Found or not Online in the current Server!</GRADIENT:840000>"
+    Permission-Denied: "<prefix><GRADIENT:FB0000>You do not have permission to execute this command!</GRADIENT:840000>"
+    Player-Only: "<prefix><GRADIENT:FB0000>This command can only be access by player!</GRADIENT:840000>"
+
+    #Message Area
+    Not-in-Area: "<prefix><GRADIENT:00FFFF>You are not in AFK Reward area</GRADIENT:00FF88>"
+    AFK-Notifications: "<prefix><GRADIENT:00FFFF>You are now AFK for <seconds> seconds</GRADIENT:00FF88>"
+
+    Not-in-Area-Player: "<prefix><GRADIENT:00FFFF>Player <player> is not in AFK Reward area</GRADIENT:00FF88>"
+    AFK-Notifications-Player: "<prefix><GRADIENT:00FFFF>Player <player> are now AFK for <seconds> seconds</GRADIENT:00FF88>"

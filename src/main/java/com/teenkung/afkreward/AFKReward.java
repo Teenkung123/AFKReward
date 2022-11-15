@@ -1,5 +1,6 @@
 package com.teenkung.afkreward;
 
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.teenkung.afkreward.Loader.ConfigLoader;
 import com.teenkung.afkreward.Loader.WorldGuardLoader;
 import com.teenkung.afkreward.Utils.PlayerTimer;
@@ -7,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,10 @@ public final class AFKReward extends JavaPlugin {
 
         //Register Plugin Event Handler
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+
+        //register Plugin Commands
+        Objects.requireNonNull(getCommand("afkreward")).setExecutor(new CommandListener());
+        Objects.requireNonNull(getCommand("afkreward")).setTabCompleter(new CommandCompleter());
 
         //load Worldguard API
         WorldGuardLoader.loadWorldGuard();
@@ -57,8 +63,6 @@ public final class AFKReward extends JavaPlugin {
             message = message.replace(hexCode, builder.toString());
             matcher = pattern.matcher(message);
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return IridiumColorAPI.process(ChatColor.translateAlternateColorCodes('&', message));
     }
-
-    
 }

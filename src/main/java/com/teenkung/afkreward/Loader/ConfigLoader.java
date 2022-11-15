@@ -14,16 +14,16 @@ import static com.teenkung.afkreward.AFKReward.colorize;
 public class ConfigLoader {
 
     private static OptionType type;
-    private static String worldName;
-    private static String regionName;
+    private static ArrayList<String> worldName = new ArrayList<>();
+    private static ArrayList<String> regionName = new ArrayList<>();
     private static final ArrayList<String> idList = new ArrayList<>();
     private static final HashMap<String, Integer> rewardTime = new HashMap<>();
     private static final HashMap<String, Boolean> rewardRepeat = new HashMap<>();
     private static final HashMap<String, ArrayList<String>> rewardCommand = new HashMap<>();
 
     public static OptionType getType() { return type; }
-    public static String getWorldName() { return worldName; }
-    public static String getRegionName() { return regionName; }
+    public static ArrayList<String> getWorldName() { return worldName; }
+    public static ArrayList<String> getRegionName() { return regionName; }
     public static ArrayList<String> getIdList() { return idList; }
     public static int getRewardTime(String id) { return rewardTime.getOrDefault(id, 2000000000); }
     public static boolean getRewardRepeat(String id) { return rewardRepeat.getOrDefault(id,false); }
@@ -37,6 +37,10 @@ public class ConfigLoader {
         instance.saveDefaultConfig();
     }
 
+    public static String getMessage(String path, String def) {
+            return AFKReward.getInstance().getConfig().getString("Languages." + path, def)
+                    .replaceAll("<prefix>", colorize(AFKReward.getInstance().getConfig().getString("Languages.Prefix", "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> ")));
+    }
     public static void loadConfig() {
         System.out.println(colorize("&aLoading configuration"));
         AFKReward instance = AFKReward.getInstance();
@@ -47,8 +51,8 @@ public class ConfigLoader {
             Bukkit.getPluginManager().disablePlugin(instance);
             return;
         }
-        worldName = config.getString("option.world.name", "AFKReward");
-        regionName = config.getString("option.region.name", "AFKReward");
+        worldName = new ArrayList<>(config.getStringList("option.world.name"));
+        regionName = new ArrayList<>(config.getStringList("option.region.name"));
 
         WorldGuardLoader.clearWorldGuard();
         idList.clear();
