@@ -1,14 +1,19 @@
-package com.teenkung.afkreward;
+package com.teenkung.afkreward.Loader;
 
+import com.teenkung.afkreward.AFKReward;
+import com.teenkung.afkreward.Utils.OptionType;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class configLoader {
+import static com.teenkung.afkreward.AFKReward.colorize;
 
-    private static optionType type;
+public class ConfigLoader {
+
+    private static OptionType type;
     private static String worldName;
     private static String regionName;
     private static final ArrayList<String> idList = new ArrayList<>();
@@ -16,7 +21,7 @@ public class configLoader {
     private static final HashMap<String, Boolean> rewardRepeat = new HashMap<>();
     private static final HashMap<String, ArrayList<String>> rewardCommand = new HashMap<>();
 
-    public static optionType getType() { return type; }
+    public static OptionType getType() { return type; }
     public static String getWorldName() { return worldName; }
     public static String getRegionName() { return regionName; }
     public static ArrayList<String> getIdList() { return idList; }
@@ -33,16 +38,20 @@ public class configLoader {
     }
 
     public static void loadConfig() {
+        System.out.println(colorize("&aLoading configuration"));
         AFKReward instance = AFKReward.getInstance();
         FileConfiguration config = instance.getConfig();
-        type = optionType.fromValue(config.getString("option.type", "region").toLowerCase());
+        type = OptionType.fromValue(config.getString("option.type", "region").toLowerCase());
         if (type == null) {
-            System.out.println("Invalid Option Type! Please check spelling at options.type");
+            System.out.println(colorize("&4Invalid Option Type! Please check spelling at options.type!"));
+            Bukkit.getPluginManager().disablePlugin(instance);
             return;
         }
         worldName = config.getString("option.world.name", "AFKReward");
         regionName = config.getString("option.region.name", "AFKReward");
 
+        WorldGuardLoader.clearWorldGuard();
+        idList.clear();
         rewardTime.clear();
         rewardRepeat.clear();
         rewardCommand.clear();
@@ -61,9 +70,12 @@ public class configLoader {
                 rewardCommand.put(id, new ArrayList<>(config.getStringList(path+"rewards")));
 
             }
+            System.out.println(colorize("&aLoaded configuration"));
         } else {
-            System.out.println("Could not load Configuration File!");
+            System.out.println(colorize("&4Could not load Configuration File! Something went wrong!"));
+            Bukkit.getPluginManager().disablePlugin(instance);
         }
+        WorldGuardLoader.loadWorldGuard();
 
 
 

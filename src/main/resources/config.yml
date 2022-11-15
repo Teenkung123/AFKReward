@@ -11,12 +11,12 @@ options:
         name: 'AFKReward'
 
 rewards:
-    '1':
+    'Example':
         #this example will execute every 300 seconds of AFK Time
         time: 300
         #Will timer repeat?
         repeat: true
         #Command in rewards
         rewards:
-            - 'say You have been AFK for {seconds} seconds!'
-            - 'give {player} dirt 1 0'
+            - 'w <player> You have been AFK for <seconds> seconds!'
+            - 'give <player> dirt'
