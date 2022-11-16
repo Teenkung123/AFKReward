@@ -1,5 +1,5 @@
 options:
-    #available: World, Region
+    #available: World, Region, BOTH
     type: 'Region'
     #if set type to 'Region'
     region:
@@ -10,10 +10,18 @@ options:
     world:
         #Name of world
         name:
-            - AFKReward
+            - AFKWorld
 
 rewards:
     'Example':
+        #name of reward
+        name: example
+        #What region/world this reward will apply to.
+        #use "ALL" to apply to all regions
+        apply-to:
+            region:
+                - AFKReward
+            world: []
         #this example will execute every 300 seconds of AFK Time
         time: 300
         #Will timer repeat?
@@ -37,3 +45,4 @@ Language:
 
     Not-in-Area-Player: "<prefix><GRADIENT:00FFFF>Player <player> is not in AFK Reward area</GRADIENT:00FF88>"
     AFK-Notifications-Player: "<prefix><GRADIENT:00FFFF>Player <player> are now AFK for <seconds> seconds</GRADIENT:00FF88>"
+

@@ -27,10 +27,10 @@ public class PlayerTimer {
     //Method executed by startTimer Method
     private static void executeTask() {
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            if (isInAFKRegion(player)) {
-                if (playerTimer.containsKey(player)) {
-                    playerTimer.replace(player, playerTimer.get(player) + 1);
-                    for (String id : ConfigLoader.getIdList()) {
+            for (String id : ConfigLoader.getIdList()) {
+                if (isInAFKRegion(player, id)) {
+                    if (playerTimer.containsKey(player)) {
+                        playerTimer.replace(player, playerTimer.get(player) + 1);
                         if (ConfigLoader.getRewardTime(id) != -1) {
                             if (ConfigLoader.getRewardRepeat(id)) {
                                 if (playerTimer.get(player) % ConfigLoader.getRewardTime(id) == 0) {
@@ -42,19 +42,45 @@ public class PlayerTimer {
                                 }
                             }
                         }
+                    } else {
+                        playerTimer.put(player, 0);
                     }
                 } else {
-                    playerTimer.put(player, 0);
-                }
-            } else {
-                if (playerTimer.containsKey(player)) {
-                    removePlayer(player);
+                    if (playerTimer.containsKey(player)) {
+                        removePlayer(player);
+                    }
                 }
             }
         }
     }
 
-    public static boolean isInAFKRegion(Player player) {
+    public static boolean isInAFKRegion(Player player, String id) {
+        if (ConfigLoader.getType() == OptionType.REGION) {
+            for (String name : ConfigLoader.getApplyRegions(id)) {
+                ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(name);
+                if (pr != null) {
+                    return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+                }
+            }
+        } else if (ConfigLoader.getType() == OptionType.WORLD){
+            return ConfigLoader.getApplyWorlds(id).contains(player.getWorld().getName());
+        } else if (ConfigLoader.getType() == OptionType.BOTH) {
+            if (ConfigLoader.getApplyWorlds(id).contains(player.getWorld().getName())) {
+                return ConfigLoader.getApplyWorlds(id).contains(player.getWorld().getName());
+            } else {
+                for (String name : ConfigLoader.getApplyRegions(id)) {
+                    ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(name);
+                    if (pr != null) {
+                        return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    public static boolean isInAllAFKRegion(Player player) {
         if (ConfigLoader.getType() == OptionType.REGION) {
             for (String name : ConfigLoader.getRegionName()) {
                 ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(name);
@@ -62,8 +88,20 @@ public class PlayerTimer {
                     return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
                 }
             }
-        } else {
+        } else if (ConfigLoader.getType() == OptionType.WORLD){
             return ConfigLoader.getWorldName().contains(player.getWorld().getName());
+        } else if (ConfigLoader.getType() == OptionType.BOTH) {
+            if (ConfigLoader.getWorldName().contains(player.getWorld().getName())) {
+                return ConfigLoader.getWorldName().contains(player.getWorld().getName());
+            } else {
+                for (String name : ConfigLoader.getRegionName()) {
+                    ProtectedRegion pr = WorldGuardLoader.getRegionManager(player.getWorld()).getRegion(name);
+                    if (pr != null) {
+                        return pr.contains(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
+                    }
+                }
+            }
+
         }
         return false;
     }
@@ -78,5 +116,9 @@ public class PlayerTimer {
                     .replaceAll("<player>", player.getName());
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }
+    }
+
+    public static void setTimer(Player target, int seconds) {
+        playerTimer.put(target, seconds);
     }
 }

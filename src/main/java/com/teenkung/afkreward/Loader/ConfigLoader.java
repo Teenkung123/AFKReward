@@ -20,6 +20,8 @@ public class ConfigLoader {
     private static final HashMap<String, Integer> rewardTime = new HashMap<>();
     private static final HashMap<String, Boolean> rewardRepeat = new HashMap<>();
     private static final HashMap<String, ArrayList<String>> rewardCommand = new HashMap<>();
+    private static final HashMap<String, ArrayList<String>> applyRegions = new HashMap<>();
+    private static final HashMap<String, ArrayList<String>> applyWorlds = new HashMap<>();
 
     public static OptionType getType() { return type; }
     public static ArrayList<String> getWorldName() { return worldName; }
@@ -28,7 +30,8 @@ public class ConfigLoader {
     public static int getRewardTime(String id) { return rewardTime.getOrDefault(id, 2000000000); }
     public static boolean getRewardRepeat(String id) { return rewardRepeat.getOrDefault(id,false); }
     public static ArrayList<String> getRewardCommand(String id) { return rewardCommand.getOrDefault(id, new ArrayList<>()); }
-
+    public static ArrayList<String> getApplyRegions(String id) { return applyRegions.getOrDefault(id, new ArrayList<>()); }
+    public static ArrayList<String> getApplyWorlds(String id) { return applyWorlds.getOrDefault(id , new ArrayList<>()); }
 
     public static void generateConfig() {
         AFKReward instance = AFKReward.getInstance();
@@ -72,7 +75,16 @@ public class ConfigLoader {
                 }
                 rewardRepeat.put(id, config.getBoolean(path+"repeat", false));
                 rewardCommand.put(id, new ArrayList<>(config.getStringList(path+"rewards")));
-
+                if (config.isList(path+"apply-to.region")) {
+                    applyRegions.put(id, new ArrayList<>(config.getStringList(path+"apply-to.region")));
+                } else {
+                    applyRegions.put(id, getRegionName());
+                }
+                if (config.isList(path+"apply-to.world")) {
+                    applyWorlds.put(id, new ArrayList<>(config.getStringList(path+"apply-to.world")));
+                } else {
+                    applyRegions.put(id, getWorldName());
+                }
             }
             System.out.println(colorize("&aLoaded configuration"));
         } else {

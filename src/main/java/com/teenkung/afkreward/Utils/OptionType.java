@@ -2,7 +2,7 @@ package com.teenkung.afkreward.Utils;
 
 public enum OptionType {
 
-    REGION, WORLD;
+    REGION, WORLD, BOTH;
 
     public static OptionType fromValue(String value) {
         for (OptionType type : OptionType.values()) {

@@ -22,7 +22,7 @@ public class CommandListener implements CommandExecutor {
                         Player target = Bukkit.getPlayer(args[1]);
                         if (target != null) {
                             if (target.isOnline()) {
-                                if (PlayerTimer.isInAFKRegion(target)) {
+                                if (PlayerTimer.isInAllAFKRegion(target)) {
                                     int seconds = PlayerTimer.getTimer(target);
                                     sender.sendMessage(colorize(ConfigLoader.getMessage("AFK-Notifications-Player", "<prefix><GRADIENT:00FFFF>Player <player> are now AFK for <seconds> seconds</GRADIENT:00FF88>")
                                         .replaceAll("<player>", target.getName())
@@ -46,7 +46,7 @@ public class CommandListener implements CommandExecutor {
                 }
 
                 if (sender instanceof Player player) {
-                    if (PlayerTimer.isInAFKRegion(player)) {
+                    if (PlayerTimer.isInAllAFKRegion(player)) {
                         int seconds = PlayerTimer.getTimer(player);
                         player.sendMessage(colorize(ConfigLoader.getMessage("AFK-Notifications", "<prefix><GRADIENT:00FFFF>You are now AFK for <seconds> seconds</GRADIENT:00FF88>")
                             .replaceAll("<seconds>", String.valueOf(seconds))
@@ -66,7 +66,36 @@ public class CommandListener implements CommandExecutor {
                 *   - reload command
                 * */
                 if (args[0].equalsIgnoreCase("set-time")) {
-                    return false;
+                    if (args.length == 3) {
+                        Player target = Bukkit.getPlayer(args[1]);
+                        if (target != null) {
+                            if (target.isOnline()) {
+                                if (PlayerTimer.isInAllAFKRegion(target)) {
+                                    try {
+                                        int seconds = Integer.parseInt(args[2]);
+                                        PlayerTimer.setTimer(target, PlayerTimer.getTimer(target) + seconds);
+                                        // !
+                                        sender.sendMessage(colorize(ConfigLoader.getMessage("AFK-Notifications-Player", "<prefix><GRADIENT:00FFFF>Player <player> are now AFK for <seconds> seconds</GRADIENT:00FF88>")
+                                                .replaceAll("<player>", target.getName())
+                                                .replaceAll("<seconds>", String.valueOf(seconds))
+                                                .replaceAll("<second>", String.valueOf(seconds % 60))
+                                                .replaceAll("<minute>", String.valueOf(Math.floor(seconds / 60D)))
+                                                .replaceAll("<hour>", String.valueOf(Math.floor(seconds / 3600D)))));
+                                    } catch (NumberFormatException e) {
+                                        sender.sendMessage(colorize(ConfigLoader.getMessage("Invalid-Arguments", "<prefix<GRADIENT:FB0000>Invalid Argument. Please Check Spelling or tab complete!</GRADIENT:840000>")));
+                                    }
+                                } else {
+                                    sender.sendMessage(colorize(ConfigLoader.getMessage("Not-in-Area-Player", "<prefix><GRADIENT:00FFFF>Player <player> is not in AFK Reward area</GRADIENT:00FF88>")));
+                                }
+                            } else {
+                                sender.sendMessage(colorize(ConfigLoader.getMessage("Player-Not-Found", "<prefix><GRADIENT:FB0000>Player not Found or not Online in the current Server!</GRADIENT:840000>")));
+                            }
+                        } else {
+                            sender.sendMessage(colorize(ConfigLoader.getMessage("Player-Not-Found", "<prefix><GRADIENT:FB0000>Player not Found or not Online in the current Server!</GRADIENT:840000>")));
+                        }
+                    } else {
+                        sender.sendMessage(colorize(ConfigLoader.getMessage("Invalid-Arguments", "<prefix<GRADIENT:FB0000>Invalid Argument. Please Check Spelling or tab complete!</GRADIENT:840000>")));
+                    }
                 } else if (args[0].equalsIgnoreCase("add-time")) {
                     return false;
                 } else if (args[0].equalsIgnoreCase("remove-time")) {
