@@ -33,16 +33,23 @@ rewards:
 
 Language:
     Prefix: "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> "
-    #Error Area
+    #Error Messages
     Invalid-Arguments: "<prefix><GRADIENT:FB0000>Invalid Argument. Please Check Spelling or tab complete!</GRADIENT:840000>"
     Player-Not-Found: "<prefix><GRADIENT:FB0000>Player not Found or not Online in the current Server!</GRADIENT:840000>"
     Permission-Denied: "<prefix><GRADIENT:FB0000>You do not have permission to execute this command!</GRADIENT:840000>"
     Player-Only: "<prefix><GRADIENT:FB0000>This command can only be access by player!</GRADIENT:840000>"
+    Unexpected-Error: "<prefix><GRADIENT:FB0000>Unexpected Error Occurred!. Please check server console for more details.</GRADIENT:840000>"
 
-    #Message Area
+    #Process Messages
     Not-in-Area: "<prefix><GRADIENT:00FFFF>You are not in AFK Reward area</GRADIENT:00FF88>"
     AFK-Notifications: "<prefix><GRADIENT:00FFFF>You are now AFK for <seconds> seconds</GRADIENT:00FF88>"
 
     Not-in-Area-Player: "<prefix><GRADIENT:00FFFF>Player <player> is not in AFK Reward area</GRADIENT:00FF88>"
     AFK-Notifications-Player: "<prefix><GRADIENT:00FFFF>Player <player> are now AFK for <seconds> seconds</GRADIENT:00FF88>"
 
+    Modify-Add: "<prefix><GRADIENT:00FFFF>Successfully added <hour>h <minute>m <second>s to PlayerTimer of <player></GRADIENT:00FF88>"
+    Modify-Subtract: "<prefix><GRADIENT:00FFFF>Successfully subtract <hour>h <minute>m <second>s from PlayerTimer of <player></GRADIENT:00FF88>"
+    Modify-Set: "<prefix><GRADIENT:00FFFF>Successfully set <player>'s PlayerTimer to <hour>h <minute>m <second>s</GRADIENT:00FF88>"
+    Modify-Notify: "<prefix><GRADIENT:00FFFF>An admin has set your PlayerTimer to <hour>h <minute>m <second>s/GRADIENT:00FF88>"
+
+    Reloading:

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.teenkung.afkreward.AFKReward.colorize;
+import static com.teenkung.afkreward.AFKReward.getInstance;
 
 public class ConfigLoader {
 
@@ -41,12 +42,24 @@ public class ConfigLoader {
     }
 
     public static String getMessage(String path, String def) {
-            return AFKReward.getInstance().getConfig().getString("Languages." + path, def)
-                    .replaceAll("<prefix>", colorize(AFKReward.getInstance().getConfig().getString("Languages.Prefix", "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> ")));
+        return AFKReward.getInstance().getConfig().getString("Languages." + path, def)
+            .replaceAll("<prefix>", colorize(AFKReward.getInstance().getConfig().getString("Languages.Prefix", "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> ")));
     }
-    public static void loadConfig() {
+    public static void loadConfig(boolean reload) {
         System.out.println(colorize("&aLoading configuration"));
         AFKReward instance = AFKReward.getInstance();
+        if (reload) {
+            instance.reloadConfig();
+            WorldGuardLoader.clearWorldGuard();
+            applyWorlds.clear();
+            applyRegions.clear();
+            worldName.clear();
+            regionName.clear();
+            idList.clear();
+            rewardTime.clear();
+            rewardRepeat.clear();
+            rewardCommand.clear();
+        }
         FileConfiguration config = instance.getConfig();
         type = OptionType.fromValue(config.getString("option.type", "region").toLowerCase());
         if (type == null) {
@@ -56,12 +69,6 @@ public class ConfigLoader {
         }
         worldName = new ArrayList<>(config.getStringList("option.world.name"));
         regionName = new ArrayList<>(config.getStringList("option.region.name"));
-
-        WorldGuardLoader.clearWorldGuard();
-        idList.clear();
-        rewardTime.clear();
-        rewardRepeat.clear();
-        rewardCommand.clear();
 
         ConfigurationSection rewardSection = config.getConfigurationSection("rewards");
         if (rewardSection!= null) {
@@ -91,7 +98,9 @@ public class ConfigLoader {
             System.out.println(colorize("&4Could not load Configuration File! Something went wrong!"));
             Bukkit.getPluginManager().disablePlugin(instance);
         }
-        WorldGuardLoader.loadWorldGuard();
+        if (type == OptionType.REGION || type == OptionType.BOTH) {
+            WorldGuardLoader.loadWorldGuard();
+        }
 
 
 

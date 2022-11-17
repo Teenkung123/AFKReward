@@ -21,7 +21,7 @@ public final class AFKReward extends JavaPlugin {
         PlayerTimer.startTimer();
 
         ConfigLoader.generateConfig();
-        ConfigLoader.loadConfig();
+        ConfigLoader.loadConfig(false);
 
         //Register Plugin Event Handler
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
