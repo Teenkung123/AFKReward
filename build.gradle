@@ -29,6 +29,7 @@ repositories {
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
+    compileOnly fileTree('libs')
     implementation 'com.iridium:IridiumColorAPI:1.0.6'
 }
 

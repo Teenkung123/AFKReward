@@ -2,7 +2,6 @@ package com.teenkung.afkreward;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import com.teenkung.afkreward.Loader.ConfigLoader;
-import com.teenkung.afkreward.Loader.WorldGuardLoader;
 import com.teenkung.afkreward.Utils.PlayerTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,10 +27,8 @@ public final class AFKReward extends JavaPlugin {
 
         //register Plugin Commands
         Objects.requireNonNull(getCommand("afkreward")).setExecutor(new CommandListener());
-        Objects.requireNonNull(getCommand("afkreward")).setTabCompleter(new CommandCompleter());
+        Objects.requireNonNull(getCommand("afkreward")).setTabCompleter(new CommandCompleter());//load Worldguard API
 
-        //load Worldguard API
-        WorldGuardLoader.loadWorldGuard();
     }
 
     @Override

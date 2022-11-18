@@ -19,23 +19,26 @@ public class CommandCompleter implements TabCompleter {
         try {
             if (sender instanceof Player player) {
                 ArrayList<String> result = new ArrayList<>();
-                result.add("status");
+                if (args.length == 1) {
+                    result.add("status");
+                }
                 if (player.hasPermission("afk-admin")) {
-                    result.add("set");
-                    result.add("add");
-                    result.add("subtract");
-                    result.add("reload");
                     if (args.length == 1) {
-                        if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("subtract")) {
+                        result.add("set");
+                        result.add("add");
+                        result.add("subtract");
+                        result.add("reload");
+                    }else if (args.length == 2) {
+                        if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("subtract") || args[0].equalsIgnoreCase("status")) {
                             for (Player loop : Bukkit.getOnlinePlayers()) {
                                 if (((Player) sender).canSee(loop)) {
                                     result.add(loop.getName());
                                 }
                             }
                         }
-                    } else if (args.length > 2) {
+                    } else if (args.length > 3) {
                         if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("subtract")) {
-                            if (args.length == 3) {
+                            if (args.length == 4) {
                                 for (int i = 0; i <= 9; i++) {
                                     result.add(args[2] + i);
                                 }

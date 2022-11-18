@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.teenkung.afkreward.AFKReward.colorize;
-import static com.teenkung.afkreward.AFKReward.getInstance;
 
 public class ConfigLoader {
 
@@ -23,6 +22,7 @@ public class ConfigLoader {
     private static final HashMap<String, ArrayList<String>> rewardCommand = new HashMap<>();
     private static final HashMap<String, ArrayList<String>> applyRegions = new HashMap<>();
     private static final HashMap<String, ArrayList<String>> applyWorlds = new HashMap<>();
+    private static boolean useCMI = false;
 
     public static OptionType getType() { return type; }
     public static ArrayList<String> getWorldName() { return worldName; }
@@ -33,6 +33,8 @@ public class ConfigLoader {
     public static ArrayList<String> getRewardCommand(String id) { return rewardCommand.getOrDefault(id, new ArrayList<>()); }
     public static ArrayList<String> getApplyRegions(String id) { return applyRegions.getOrDefault(id, new ArrayList<>()); }
     public static ArrayList<String> getApplyWorlds(String id) { return applyWorlds.getOrDefault(id , new ArrayList<>()); }
+    public static boolean getUseCMI() { return useCMI; }
+
 
     public static void generateConfig() {
         AFKReward instance = AFKReward.getInstance();
@@ -42,14 +44,15 @@ public class ConfigLoader {
     }
 
     public static String getMessage(String path, String def) {
-        return AFKReward.getInstance().getConfig().getString("Languages." + path, def)
-            .replaceAll("<prefix>", colorize(AFKReward.getInstance().getConfig().getString("Languages.Prefix", "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> ")));
+        return AFKReward.getInstance().getConfig().getString("Language." + path, def)
+            .replaceAll("<prefix>", colorize(AFKReward.getInstance().getConfig().getString("Languages.Prefix", "<GRADIENT:FBEA01>[AFK Rewards]</GRADIENT:00FDAA>&r ")));
     }
     public static void loadConfig(boolean reload) {
-        System.out.println(colorize("&aLoading configuration"));
+        System.out.println(colorize(getMessage("Loading", "<GRADIENT:E5FF67>Loading Configuration. . .</GRADIENT:FD85FC>")));
         AFKReward instance = AFKReward.getInstance();
         if (reload) {
             instance.reloadConfig();
+            useCMI = false;
             WorldGuardLoader.clearWorldGuard();
             applyWorlds.clear();
             applyRegions.clear();
@@ -67,8 +70,8 @@ public class ConfigLoader {
             Bukkit.getPluginManager().disablePlugin(instance);
             return;
         }
-        worldName = new ArrayList<>(config.getStringList("option.world.name"));
-        regionName = new ArrayList<>(config.getStringList("option.region.name"));
+        worldName = new ArrayList<>(config.getStringList("options.world.name"));
+        regionName = new ArrayList<>(config.getStringList("options.region.name"));
 
         ConfigurationSection rewardSection = config.getConfigurationSection("rewards");
         if (rewardSection!= null) {
@@ -93,7 +96,7 @@ public class ConfigLoader {
                     applyRegions.put(id, getWorldName());
                 }
             }
-            System.out.println(colorize("&aLoaded configuration"));
+            System.out.println(colorize(getMessage("Loaded", "<GRADIENT:E5FF67>Successfully loaded configuration</GRADIENT:FD85FC>")));
         } else {
             System.out.println(colorize("&4Could not load Configuration File! Something went wrong!"));
             Bukkit.getPluginManager().disablePlugin(instance);
@@ -101,7 +104,9 @@ public class ConfigLoader {
         if (type == OptionType.REGION || type == OptionType.BOTH) {
             WorldGuardLoader.loadWorldGuard();
         }
-
+        if (config.getBoolean("options.Interaction.CMI")) {
+            useCMI = true;
+        }
 
 
     }

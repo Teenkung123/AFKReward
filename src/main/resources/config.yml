@@ -11,6 +11,10 @@ options:
         #Name of world
         name:
             - AFKWorld
+    #get other's plugin AFK status to check is player actually AFK or not
+    Interaction:
+        CMI: true
+
 
 rewards:
     'Example':
@@ -32,7 +36,7 @@ rewards:
             - 'give <player> dirt'
 
 Language:
-    Prefix: "<GRADIENT:2C08BA>[AFK Rewards]</GRADIENT:028A97> "
+    Prefix: "<GRADIENT:FBEA01>[AFK Rewards]</GRADIENT:00FDAA>&r "
     #Error Messages
     Invalid-Arguments: "<prefix><GRADIENT:FB0000>Invalid Argument. Please Check Spelling or tab complete!</GRADIENT:840000>"
     Player-Not-Found: "<prefix><GRADIENT:FB0000>Player not Found or not Online in the current Server!</GRADIENT:840000>"
@@ -41,6 +45,9 @@ Language:
     Unexpected-Error: "<prefix><GRADIENT:FB0000>Unexpected Error Occurred!. Please check server console for more details.</GRADIENT:840000>"
 
     #Process Messages
+    Command-Usage: '<prefix><GRADIENT:00FFFF>Usage: /afkreward status </GRADIENT:00FF88>'
+    Command-Usage-Admin: '<prefix><GRADIENT:00FFFF>Usage: /afkreward (<reload>)(<status> <player>)(<add/subtract/set> <player> <value>)</GRADIENT:00FF88>'
+
     Not-in-Area: "<prefix><GRADIENT:00FFFF>You are not in AFK Reward area</GRADIENT:00FF88>"
     AFK-Notifications: "<prefix><GRADIENT:00FFFF>You are now AFK for <seconds> seconds</GRADIENT:00FF88>"
 
@@ -50,6 +57,11 @@ Language:
     Modify-Add: "<prefix><GRADIENT:00FFFF>Successfully added <hour>h <minute>m <second>s to PlayerTimer of <player></GRADIENT:00FF88>"
     Modify-Subtract: "<prefix><GRADIENT:00FFFF>Successfully subtract <hour>h <minute>m <second>s from PlayerTimer of <player></GRADIENT:00FF88>"
     Modify-Set: "<prefix><GRADIENT:00FFFF>Successfully set <player>'s PlayerTimer to <hour>h <minute>m <second>s</GRADIENT:00FF88>"
-    Modify-Notify: "<prefix><GRADIENT:00FFFF>An admin has set your PlayerTimer to <hour>h <minute>m <second>s/GRADIENT:00FF88>"
+    Modify-Notify: "<prefix><GRADIENT:00FFFF>An admin has set your PlayerTimer to <hour>h <minute>m <second>s</GRADIENT:00FF88>"
 
-    Reloading:
+    Reloading: "<prefix><GRADIENT:E5FF67>Reloading Configuration. . .</GRADIENT:FD85FC>"
+    Reloaded: "<prefix><GRADIENT:E5FF67>Successfully reloaded configuration</GRADIENT:FD85FC>"
+
+    #This Message showed in console
+    Loading: "<GRADIENT:E5FF67>Loading Configuration. . .</GRADIENT:FD85FC>"
+    Loaded: "<GRADIENT:E5FF67>Successfully loaded configuration</GRADIENT:FD85FC>"
